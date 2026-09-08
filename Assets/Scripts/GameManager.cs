@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     
     static public (PieceColor,PieceType) GetPiece(int value)
     {
-        PieceColor pieceColor = (PieceColor)(value % 1);
+        PieceColor pieceColor = (PieceColor)(value % 2);
         PieceType pieceType = (PieceType)(value - pieceColor);
         
         return(pieceColor, pieceType);

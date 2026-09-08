@@ -23,17 +23,11 @@ public class PieceRenderer : MonoBehaviour
     [Foldout("BlackSprites"), SerializeField] private Sprite _blackQueen;
     [Foldout("BlackSprites"), SerializeField] private Sprite _blackKing;
 
-    private Dictionary<int, GameObject> _piecePosition = new Dictionary<int, GameObject>();
-    
+    private Dictionary<int, SpriteRenderer> _piecePosition = new Dictionary<int, SpriteRenderer>();
     
     public void RenderNewBoard(int[] grid)
     {
-        foreach (GameObject piece in _piecePosition.Values)
-        {
-            Destroy(piece);
-        }
-        
-        _piecePosition.Clear();
+        DestroyBoard();
         
         for (int i = 0; i < grid.Length; i++)
         {
@@ -43,17 +37,75 @@ public class PieceRenderer : MonoBehaviour
             PieceColor pieceColor = piece.Item1;
             PieceType pieceType = piece.Item2;
             
+            GameObject newPiece = new GameObject();
+            newPiece.transform.parent = transform;
+            newPiece.transform.localPosition = new Vector3(i % 8 * _cellSize.x, i / 8 *  -_cellSize.y , 0);
+            newPiece.name = pieceColor + pieceType.ToString();
+            SpriteRenderer spriteRenderer = newPiece.AddComponent<SpriteRenderer>();
+            spriteRenderer.sortingOrder = 1;
+            spriteRenderer.sprite = GetSprite(grid[i]);
             
+            _piecePosition.Add(i, spriteRenderer);
         }
     }
+
+    [Button]
+    public void DestroyBoard()
+    {
+        foreach (SpriteRenderer piece in _piecePosition.Values)
+        {
+            if(piece) Destroy(piece);
+        }
+        _piecePosition.Clear();
+    }
+
+    public void DestroyPiece(int piecePosition)
+    {
+        if(!_piecePosition.TryGetValue(piecePosition, out var piece))
+        {
+            Debug.LogWarning("Piece not found: " + piecePosition);
+            return;
+        }
+        if(piece) Destroy(piece.gameObject);
+        _piecePosition.Remove(piecePosition);
+    }
+
+    public void ReplaceSprite(int piecePosition, int pieceIndex)
+    {
+        if(!_piecePosition.TryGetValue(piecePosition, out var piece))
+        {
+            Debug.LogWarning("Piece not found: " + piecePosition);
+            return;
+        }
+        piece.sprite = GetSprite(pieceIndex);
+    }
     
-    
-    
-    
-    
-    
-    
-    
+    public Sprite GetSprite(int pieceIndex)
+    {
+        
+        (PieceColor,PieceType) piece = GameManager.GetPiece(pieceIndex);
+        PieceColor pieceColor = piece.Item1;
+        PieceType pieceType = piece.Item2;
+        
+        switch (pieceType)
+        {
+            case PieceType.Pawn:
+                return pieceColor == PieceColor.White ? _whitePawn : _blackPawn;
+            case PieceType.Bishop:
+                return pieceColor == PieceColor.White ? _whiteBishop : _blackBishop;
+            case PieceType.Knight:
+                return pieceColor == PieceColor.White ? _whiteKnight : _blackKnight;
+            case PieceType.Rook:
+                return pieceColor == PieceColor.White ? _whiteRook : _blackRook;
+            case PieceType.Queen:
+                return pieceColor == PieceColor.White ? _whiteQueen : _blackQueen;
+            case PieceType.King:
+                return pieceColor == PieceColor.White ? _whiteKing : _blackKing;
+            default:
+                Debug.LogWarning("Unknown piece type: " + pieceType);
+                return null;
+        }
+    }
     
     static public PieceRenderer Instance { get; private set; }
     private void Awake()
@@ -70,6 +122,18 @@ public class PieceRenderer : MonoBehaviour
         else
         {
             Instance = this;
+        }
+    }
+    
+    public void OnDrawGizmosSelected()
+    {
+        for (int i = 0; i < _gridSize.x; i++)
+        {
+            for (int f = 0; f < _gridSize.x; f++)
+            {
+                Gizmos.color = (i+f) % 2  == 0 ? Color.violetRed: Color.blueViolet;
+                Gizmos.DrawCube( new Vector2(i * _cellSize.x + transform.position.x, -f * _cellSize.y + transform.position.y), _cellSize);
+            }
         }
     }
 }
