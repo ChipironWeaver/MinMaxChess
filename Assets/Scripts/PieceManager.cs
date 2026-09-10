@@ -13,7 +13,9 @@ public class PieceManager : MonoBehaviour
     [Header("Grid Settings")]
     [SerializeField] private Vector2Int _gridSize;
     [SerializeField] private Vector2 _cellSize;
+    [SerializeField] private bool _wobble;
     [SerializeField] private Material _pieceMaterial;
+    [SerializeField] private Material _wobbleMaterial;
     [Header("Move Piece Settings")]
     [SerializeField] private float _snapSpeed;
     [SerializeField] private float _resetSpeed;
@@ -96,7 +98,7 @@ public class PieceManager : MonoBehaviour
         SpriteRenderer spriteRenderer = newPiece.AddComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = 1;
         spriteRenderer.sprite = GetSprite(pieceIndex);
-        spriteRenderer.material = _pieceMaterial;
+        spriteRenderer.material = _wobble ? _wobbleMaterial : _pieceMaterial;
             
         _piecePosition.Add(gridPosition, spriteRenderer);
     }
