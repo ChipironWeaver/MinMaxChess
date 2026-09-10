@@ -60,7 +60,7 @@ Material:
     m_Floats:
     - _WobbleFreak: 20
     - _WobbleSpeed: 5
-    - _WobbleStrenght: 0.05
+    - _WobbleStrenght: 0.1
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

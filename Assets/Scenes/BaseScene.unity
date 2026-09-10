@@ -167,7 +167,9 @@ MonoBehaviour:
   _camera: {fileID: 519420031}
   _gridSize: {x: 8, y: 8}
   _cellSize: {x: 1, y: 1}
+  _wobble: 0
   _pieceMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  _wobbleMaterial: {fileID: 2100000, guid: cbd7ee5d28f00244ba6ed87e6dbecd69, type: 2}
   _snapSpeed: 0.125
   _resetSpeed: 0.25
   _whitePawn: {fileID: 1640199914835614593, guid: 08ccddcb6896e4547bff33714b068085, type: 3}

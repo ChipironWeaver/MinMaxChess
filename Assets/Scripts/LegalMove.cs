@@ -8,6 +8,8 @@ public static class LegalMove
     {
         PieceType piece = (PieceType)(grid[position] - grid[position]%2);
         
+        int[] kingMoves = { 9, 8, 7, 1, -9, -8, -7, -1};
+        
         switch(piece)
         {
             case PieceType.Rook:
@@ -16,6 +18,8 @@ public static class LegalMove
                 return GetBishopLegalMove(grid, position);
             case PieceType.Queen:
                 return GetQueenLegalMove(grid, position);
+            case PieceType.King:
+                return GetLegalMoveFromArray(grid, position,kingMoves);
             default:
             {
                 Debug.LogWarning("No legal move for position " + position + " for " + grid[position].ToString());
@@ -223,6 +227,28 @@ public static class LegalMove
             legalMoves[i] = 1;
         }
         
+        return legalMoves;
+    }
+
+
+    static public int[] GetLegalMoveFromArray(int[] grid, int position, int[] moveArray)
+    {
+        int[] legalMoves = new int[64];
+        PieceColor color = (PieceColor)(grid[position] - PieceType.Rook);
+
+        foreach (int i in moveArray)
+        {
+            int pos = i + position;
+            if(pos < 0 || pos >= 64) continue;
+            
+            if (grid[pos] != -1 && i != position)
+            {
+                if(grid[pos] % 2 != (int)color) legalMoves[pos] = 2;
+                
+                continue;
+            }
+            legalMoves[pos] = 1;
+        }
         return legalMoves;
     }
 }
