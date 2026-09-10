@@ -4,11 +4,13 @@ using UnityEngine;
 
 public static class LegalMove 
 {
+    private static readonly (int,int)[] KingMoves = { (-1,-1) , (-1,-0) , (-1,1) , (0,-1) , (0,1), (1,-1) , (1,-0) , (1,1) };
+    private static readonly (int,int)[] KnightMoves = { (-2,-1) , (-2,1) , (-1,-2) , (-1,2) , (2,-1) , (2,1) , (1,-2) , (1,2)};
     static public int[] GetLegalMove(int[] grid, int position)
     {
         PieceType piece = (PieceType)(grid[position] - grid[position]%2);
         
-        int[] kingMoves = { 9, 8, 7, 1, -9, -8, -7, -1};
+        
         
         switch(piece)
         {
@@ -19,7 +21,9 @@ public static class LegalMove
             case PieceType.Queen:
                 return GetQueenLegalMove(grid, position);
             case PieceType.King:
-                return GetLegalMoveFromArray(grid, position,kingMoves);
+                return GetLegalMoveFromArray(grid, position,KingMoves);
+            case PieceType.Knight:
+                return GetLegalMoveFromArray(grid, position,KnightMoves);
             default:
             {
                 Debug.LogWarning("No legal move for position " + position + " for " + grid[position].ToString());
@@ -84,7 +88,7 @@ public static class LegalMove
     static public int[] GetBishopLegalMove(int[] grid, int position)
     {
         int[] legalMoves = new int[64];
-        PieceColor color = (PieceColor)(grid[position] - PieceType.Rook);
+        PieceColor color = (PieceColor)(grid[position] - PieceType.Bishop);
         
         for (int i = position; i >= 0; i -= 9)
         {
@@ -136,7 +140,7 @@ public static class LegalMove
     static public int[] GetQueenLegalMove(int[] grid, int position)
     {
         int[] legalMoves = new int[64];
-        PieceColor color = (PieceColor)(grid[position] - PieceType.Rook);
+        PieceColor color = (PieceColor)(grid[position] - PieceType.Queen);
         
         for (int i = position; i >= 0; i -= 9)
         {
@@ -231,20 +235,21 @@ public static class LegalMove
     }
 
 
-    static public int[] GetLegalMoveFromArray(int[] grid, int position, int[] moveArray)
+    static public int[] GetLegalMoveFromArray(int[] grid, int position, (int,int)[] moveArray)
     {
         int[] legalMoves = new int[64];
-        PieceColor color = (PieceColor)(grid[position] - PieceType.Rook);
+        PieceColor color = (PieceColor)(grid[position]%2);
 
-        foreach (int i in moveArray)
+        foreach ((int i,int f) in moveArray)
         {
-            int pos = i + position;
-            if(pos < 0 || pos >= 64) continue;
             
+            int pos = i + position + f * 8;
+
+            if(pos is < 0 or >= 64 ) continue;
+            if(pos/8 - position/8 != f) continue;
             if (grid[pos] != -1 && i != position)
             {
                 if(grid[pos] % 2 != (int)color) legalMoves[pos] = 2;
-                
                 continue;
             }
             legalMoves[pos] = 1;
