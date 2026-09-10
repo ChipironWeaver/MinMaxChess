@@ -19,9 +19,11 @@ public class GridRenderer : MonoBehaviour
     [SerializeField] private Color _oddColor;
     [SerializeField] private float _colorFadeDuration;
     [SerializeField] private Ease _colorFaceEase;
-    [FormerlySerializedAs("_cellPosition")]
-    [Header("Test")] 
-    [SerializeField] private Vector2Int _testCellPosition;
+    [Header("HighlightType")]
+    [SerializeField] private float _highlightStrenght;
+    [SerializeField] private Color _originalColor;
+    [SerializeField] private Color _legalMoveColor;
+    [SerializeField] private Color _pieceEatingColor;
     
     private List<List<SpriteRenderer>> _cells = new List<List<SpriteRenderer>>();
 
@@ -65,11 +67,10 @@ public class GridRenderer : MonoBehaviour
     }
 
     [Button]
-    public void ResetColors()
+    public void ResetGridColors()
     {
         for (int i = 0; i < _gridSize.x; i++)
         {
-
             for (int f = 0; f < _gridSize.x; f++)
             {
                 _cells[i][f].color = (i+f) % 2  == 0 ? _evenColor : _oddColor;
@@ -77,14 +78,38 @@ public class GridRenderer : MonoBehaviour
         }
     }
 
-    [Button]
-    public void GridTest()
+    public void SetHightlight(Highlights highlight, int position)
     {
-        SetGridColor(_testCellPosition,Color.aquamarine);
+        Color color;
+        switch(highlight)
+        {
+            case Highlights.OriginalColor:
+                color = _originalColor;
+                break;
+            case Highlights.LegalColor:
+                color = _legalMoveColor;
+                break;
+            case Highlights.PieceEatingColor:
+                color = _pieceEatingColor;
+                break;
+            default:
+                color = Color.magenta;
+                break;
+        }
+        print(position + " : " + position % 2);
+        SetGridColor(position,Color.Lerp(color, (position % 8 + position / 8) % 2 == 0 ? _evenColor : _oddColor, _highlightStrenght));
+    }
+
+    public void ResetSingularColor(int position, bool instant = false)
+    {
+        Vector2Int gridPos = new Vector2Int(position % 8, position / 8);
+        if(instant) _cells[gridPos.x][gridPos.y].color = (gridPos.x + gridPos.y) % 2 == 0 ? _evenColor : _oddColor;
+        else _cells[gridPos.x][gridPos.y].DOColor((gridPos.x + gridPos.y) % 2 == 0 ? _evenColor : _oddColor,_colorFadeDuration).SetEase(_colorFaceEase);
     }
     
-    public void SetGridColor(Vector2Int gridPos, Color color, bool instant = false)
+    public void SetGridColor(int position, Color color, bool instant = false)
     {
+        Vector2Int gridPos = new Vector2Int(position % 8, position / 8);
         if (_cells.Count > gridPos.x)
         {
             List<SpriteRenderer> cell = _cells[gridPos.x];
@@ -124,5 +149,12 @@ public class GridRenderer : MonoBehaviour
                 Gizmos.DrawCube( new Vector2(i * _cellSize.x + transform.position.x, -f * _cellSize.y + transform.position.y), _cellSize);
             }
         }
+    }
+
+    public enum Highlights
+    {
+        OriginalColor,
+        LegalColor,
+        PieceEatingColor,
     }
 }

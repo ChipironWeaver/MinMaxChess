@@ -168,7 +168,7 @@ MonoBehaviour:
   _gridSize: {x: 8, y: 8}
   _cellSize: {x: 1, y: 1}
   _snapSpeed: 0.125
-  _resetSpeed: 0.5
+  _resetSpeed: 0.25
   _whitePawn: {fileID: 1640199914835614593, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
   _whiteBishop: {fileID: 2235466517648937028, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
   _whiteKnight: {fileID: 7790804119003883122, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
@@ -637,9 +637,12 @@ MonoBehaviour:
   _cellSprite: {fileID: 7482667652216324306, guid: 4bd4ebff9f56c5546a0474db2a5074b7, type: 3}
   _evenColor: {r: 1, g: 0.7884742, b: 0.5235849, a: 1}
   _oddColor: {r: 0.6603774, g: 0.46071288, b: 0.2024742, a: 1}
-  _colorFadeDuration: 0
-  _colorFaceEase: 0
-  _testCellPosition: {x: 5, y: 4}
+  _colorFadeDuration: 0.2
+  _colorFaceEase: 17
+  _highlightStrenght: 0.8
+  _originalColor: {r: 0, g: 1, b: 0.95000005, a: 1}
+  _legalMoveColor: {r: 0, g: 1, b: 0.25, a: 1}
+  _pieceEatingColor: {r: 1, g: 0.3483723, b: 0, a: 1}
 --- !u!4 &1084907315
 Transform:
   m_ObjectHideFlags: 0
@@ -701,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   grid: 
   gridSize: {x: 8, y: 8}
-  fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+  fenCode: rnbqk1nr/pp1ppppp/2P5/1P2b3/2K1p1QP/8/PP1P1P2/RNB2BNR
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

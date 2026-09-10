@@ -102,7 +102,7 @@ public class PieceManager : MonoBehaviour
     {
         Vector3 position = new Vector3(piecePosition % 8 * _cellSize.x, piecePosition / 8 * -_cellSize.y, 0);
         if(moveSpeed == 0) _piecePosition[piecePosition].transform.localPosition = position;
-        else _piecePosition[piecePosition].transform.DOLocalMove(position,moveSpeed).SetEase(Ease.InOutElastic);
+        else _piecePosition[piecePosition].transform.DOLocalMove(position,moveSpeed).SetEase(Ease.InOutQuad);
     }
     
     public void SetPieceFollowCursor(int piecePosition)
@@ -115,12 +115,16 @@ public class PieceManager : MonoBehaviour
                 if(currentIndex == -1) ResetPiecePos(_followerIndex,_resetSpeed);
                 else
                 {
-                    DestroyPiece(currentIndex);
-                    GameManager.Instance.MovePiece((_followerIndex,currentIndex));
-                    SpriteRenderer spriteRenderer = _piecePosition[_followerIndex];
-                    _piecePosition.Remove(_followerIndex);
-                    _piecePosition.Add(currentIndex,spriteRenderer);
+                    if(currentIndex != _followerIndex)
+                    {
+                        DestroyPiece(currentIndex);
+                        GameManager.Instance.MovePiece((_followerIndex, currentIndex));
+                        SpriteRenderer spriteRenderer = _piecePosition[_followerIndex];
+                        _piecePosition.Remove(_followerIndex);
+                        _piecePosition.Add(currentIndex, spriteRenderer);
+                    }
                     ResetPiecePos(currentIndex,_snapSpeed);
+                    GridRenderer.Instance.ResetSingularColor(_followerIndex);
                 }
                 _follower = null;
                 _followerIndex = -1;
@@ -132,6 +136,7 @@ public class PieceManager : MonoBehaviour
             {
                 _follower = piece.gameObject;
                 _followerIndex = piecePosition;
+                GridRenderer.Instance.SetHightlight(GridRenderer.Highlights.OriginalColor,_followerIndex);
             }
             else Debug.Log("Clicker on no piece position: " + piecePosition);
         }
