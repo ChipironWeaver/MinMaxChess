@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PieceRenderer : MonoBehaviour
+public class PieceManager : MonoBehaviour
 {
+    [Header("Reference")]
+    [SerializeField] private Camera _camera;
     [Header("Grid Settings")]
     [SerializeField] private Vector2Int _gridSize;
     [SerializeField] private Vector2 _cellSize;
+    [Header("Move Piece Settings")]
+    [SerializeField] private float _snapSpeed;
+    [SerializeField] private float _resetSpeed;
 
     [Foldout("WhiteSprites"), SerializeField] private Sprite _whitePawn;
     [Foldout("WhiteSprites"), SerializeField] private Sprite _whiteBishop;
@@ -23,7 +30,19 @@ public class PieceRenderer : MonoBehaviour
     [Foldout("BlackSprites"), SerializeField] private Sprite _blackQueen;
     [Foldout("BlackSprites"), SerializeField] private Sprite _blackKing;
 
-    private Dictionary<int, SpriteRenderer> _piecePosition = new Dictionary<int, SpriteRenderer>();
+    private readonly Dictionary<int, SpriteRenderer> _piecePosition = new Dictionary<int, SpriteRenderer>();
+    private GameObject _follower = null;
+    private int _followerIndex = -1;
+    
+    
+    public void Update()
+    {
+        if (_follower)
+        {
+            Vector2 pos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            _follower.transform.position = pos;
+        }
+    }
     
     public void RenderNewBoard(int[] grid)
     {
@@ -33,6 +52,31 @@ public class PieceRenderer : MonoBehaviour
         {
             CreatePiece(grid[i], i);
         }
+    }
+
+    public void OnClick(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            SetPieceFollowCursor(GetPiecePosition(_camera.ScreenToWorldPoint(Mouse.current.position.ReadValue())));
+        }
+
+        if (context.canceled)
+        {
+            SetPieceFollowCursor(-1);
+        }
+    }
+
+    public int GetPiecePosition(Vector3 mousePos)
+    {
+        mousePos.x += 4;
+        mousePos.y -= 4;
+        mousePos.y *= -1;
+        if (mousePos.x < 0 || mousePos.x > _gridSize.x || mousePos.y < 0 || mousePos.y > _gridSize.y) return -1;
+            
+        Vector2Int gridPosition = new Vector2Int((int)mousePos.x, (int)mousePos.y);
+        
+        return gridPosition.x + gridPosition.y * 8;
     }
 
     public void CreatePiece(int pieceIndex,int gridPosition)
@@ -53,10 +97,44 @@ public class PieceRenderer : MonoBehaviour
             
         _piecePosition.Add(gridPosition, spriteRenderer);
     }
+
+    public void ResetPiecePos(int piecePosition,float moveSpeed)
+    {
+        Vector3 position = new Vector3(piecePosition % 8 * _cellSize.x, piecePosition / 8 * -_cellSize.y, 0);
+        if(moveSpeed == 0) _piecePosition[piecePosition].transform.localPosition = position;
+        else _piecePosition[piecePosition].transform.DOLocalMove(position,moveSpeed).SetEase(Ease.InOutElastic);
+    }
     
     public void SetPieceFollowCursor(int piecePosition)
     {
-        
+        if(piecePosition == -1) 
+        {
+            if (_follower)
+            {
+                int currentIndex = GetPiecePosition(_follower.transform.position); 
+                if(currentIndex == -1) ResetPiecePos(_followerIndex,_resetSpeed);
+                else
+                {
+                    DestroyPiece(currentIndex);
+                    GameManager.Instance.MovePiece((_followerIndex,currentIndex));
+                    SpriteRenderer spriteRenderer = _piecePosition[_followerIndex];
+                    _piecePosition.Remove(_followerIndex);
+                    _piecePosition.Add(currentIndex,spriteRenderer);
+                    ResetPiecePos(currentIndex,_snapSpeed);
+                }
+                _follower = null;
+                _followerIndex = -1;
+            }
+        }
+        else if (piecePosition < 64)
+        {
+            if (_piecePosition.TryGetValue(piecePosition, out var piece))
+            {
+                _follower = piece.gameObject;
+                _followerIndex = piecePosition;
+            }
+            else Debug.Log("Clicker on no piece position: " + piecePosition);
+        }
     }
     
     [Button]
@@ -117,7 +195,7 @@ public class PieceRenderer : MonoBehaviour
         }
     }
     
-    static public PieceRenderer Instance { get; private set; }
+    static public PieceManager Instance { get; private set; }
     private void Awake()
     {
         Singleton();

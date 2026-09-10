@@ -39,9 +39,17 @@ public class GameManager : MonoBehaviour
         {
             grid = FenConvertor.GetGridFromFen(fenCode);
         }
-        PieceRenderer.Instance.RenderNewBoard(grid);
+        PieceManager.Instance.RenderNewBoard(grid);
     }
-    
+
+    public bool MovePiece((int x, int y) piece)
+    {
+        if (piece.x > 64 || piece.y > 64 || piece.x < 0 || piece.y < 0) return false;
+        grid[piece.y] =  piece.x;
+        grid[piece.x] = -1;
+
+        return true;
+    }
     
     static public (PieceColor,PieceType) GetPiece(int value)
     {
@@ -49,5 +57,23 @@ public class GameManager : MonoBehaviour
         PieceType pieceType = (PieceType)(value - pieceColor);
         
         return(pieceColor, pieceType);
+    }
+    
+    static public GameManager Instance { get; private set; }
+    private void Awake()
+    {
+        Singleton();
+    }
+
+    private void Singleton()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 }

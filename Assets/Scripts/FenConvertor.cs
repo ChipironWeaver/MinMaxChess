@@ -13,9 +13,6 @@ public class FenConvertor : MonoBehaviour
         int index = 0;
         string lowerFen = fen.ToLower();
         
-        print(lowerFen);
-        print(fen);
-        
         for(int i = 0; i < fen.Length; i++)
         {
             bool isPiece = false;
@@ -58,7 +55,6 @@ public class FenConvertor : MonoBehaviour
                         break;
                     }
                     index += number;
-                    print((int)c + " " + c);
                     break;
             }
 
