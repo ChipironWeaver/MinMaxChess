@@ -67,13 +67,32 @@ public class GridRenderer : MonoBehaviour
     }
 
     [Button]
-    public void ResetGridColors()
+    public void ResetGridColors( bool instant = false)
     {
         for (int i = 0; i < _gridSize.x; i++)
         {
             for (int f = 0; f < _gridSize.x; f++)
             {
-                _cells[i][f].color = (i+f) % 2  == 0 ? _evenColor : _oddColor;
+                if(instant) _cells[i][f].color = (i+f) % 2 == 0 ? _evenColor : _oddColor;
+                else _cells[i][f].DOColor((i+f) % 2 == 0 ? _evenColor : _oddColor,_colorFadeDuration).SetEase(_colorFaceEase);
+            }
+        }
+    }
+
+    public void ShowLegalMoves(int position)
+    {
+        int[] legalMoves = LegalMove.GetLegalMove(GameManager.Instance.grid, position);
+        if(legalMoves == null)
+        {
+            print("No legal moves found");
+            return;
+        }
+        for (int i = 0; i < legalMoves.Length; i++)
+        {
+            if (legalMoves[i] > 0)
+            {
+                if (legalMoves[i] == 2) SetHightlight(Highlights.PieceEatingColor,i);
+                else SetHightlight(Highlights.LegalColor,i);
             }
         }
     }
@@ -96,7 +115,6 @@ public class GridRenderer : MonoBehaviour
                 color = Color.magenta;
                 break;
         }
-        print(position + " : " + position % 2);
         SetGridColor(position,Color.Lerp(color, (position % 8 + position / 8) % 2 == 0 ? _evenColor : _oddColor, _highlightStrenght));
     }
 

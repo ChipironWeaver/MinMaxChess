@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     11 = Black King
     */
 
+    public void Start()
+    {
+        CreateBoard();
+    }
     
     [Button]
     private void CreateBoard()
@@ -45,7 +49,10 @@ public class GameManager : MonoBehaviour
     public bool MovePiece((int x, int y) piece)
     {
         if (piece.x > 64 || piece.y > 64 || piece.x < 0 || piece.y < 0) return false;
-        grid[piece.y] =  piece.x;
+        
+        if(LegalMove.GetLegalMove(grid, piece.x)[piece.y] == 0) return false;
+        
+        grid[piece.y] =  grid[piece.x];
         grid[piece.x] = -1;
 
         return true;

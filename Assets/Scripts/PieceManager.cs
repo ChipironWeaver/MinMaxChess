@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -119,14 +120,18 @@ public class PieceManager : MonoBehaviour
                 {
                     if(currentIndex != _followerIndex)
                     {
-                        DestroyPiece(currentIndex);
-                        GameManager.Instance.MovePiece((_followerIndex, currentIndex));
-                        SpriteRenderer spriteRenderer = _piecePosition[_followerIndex];
-                        _piecePosition.Remove(_followerIndex);
-                        _piecePosition.Add(currentIndex, spriteRenderer);
+                        if (GameManager.Instance.MovePiece((_followerIndex, currentIndex)))
+                        {
+                            DestroyPiece(currentIndex);
+                            SpriteRenderer spriteRenderer = _piecePosition[_followerIndex];
+                            _piecePosition.Remove(_followerIndex);
+                            _followerIndex = currentIndex;
+                            _piecePosition.Add(currentIndex, spriteRenderer);
+                        }
                     }
-                    ResetPiecePos(currentIndex,_snapSpeed);
-                    GridRenderer.Instance.ResetSingularColor(_followerIndex);
+                    ResetPiecePos(_followerIndex,_snapSpeed);
+                    GridRenderer.Instance.ResetGridColors();
+                    
                 }
                 _follower = null;
                 _followerIndex = -1;
@@ -138,6 +143,7 @@ public class PieceManager : MonoBehaviour
             {
                 _follower = piece.gameObject;
                 _followerIndex = piecePosition;
+                GridRenderer.Instance.ShowLegalMoves(_followerIndex);
                 GridRenderer.Instance.SetHightlight(GridRenderer.Highlights.OriginalColor,_followerIndex);
             }
             else Debug.Log("Clicker on no piece position: " + piecePosition);
