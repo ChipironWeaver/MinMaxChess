@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 322840566}
   - component: {fileID: 322840567}
+  - component: {fileID: 322840568}
   m_Layer: 0
   m_Name: PiecePlacer
   m_TagString: Untagged
@@ -177,6 +178,36 @@ MonoBehaviour:
   _blackRook: {fileID: -2785111595853864222, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
   _blackQueen: {fileID: 5487007501125838366, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
   _blackKing: {fileID: -2470757897584452147, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
+--- !u!114 &322840568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322840565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,8 +540,8 @@ MonoBehaviour:
   _gridSize: {x: 8, y: 8}
   _cellSize: {x: 1, y: 1}
   _cellSprite: {fileID: 7482667652216324306, guid: 4bd4ebff9f56c5546a0474db2a5074b7, type: 3}
-  _evenColor: {r: 1, g: 0.91870826, b: 0.76862746, a: 1}
-  _oddColor: {r: 1, g: 0.81328934, b: 0.41176474, a: 1}
+  _evenColor: {r: 1, g: 0.7884742, b: 0.5235849, a: 1}
+  _oddColor: {r: 0.6603774, g: 0.46071288, b: 0.2024742, a: 1}
   _colorFadeDuration: 0
   _colorFaceEase: 0
   _testCellPosition: {x: 5, y: 4}
@@ -575,6 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   grid: 
   gridSize: {x: 8, y: 8}
+  fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -25,6 +25,11 @@ public class GridRenderer : MonoBehaviour
     
     private List<List<SpriteRenderer>> _cells = new List<List<SpriteRenderer>>();
 
+    public void Start()
+    {
+        CreateGrid();
+    }
+
     [Button]
     public void CreateGrid()
     {

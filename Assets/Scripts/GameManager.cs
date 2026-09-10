@@ -1,9 +1,11 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public int[] grid;
-    public Vector2Int gridSize = new Vector2Int(8,8); 
+    public Vector2Int gridSize = new Vector2Int(8,8);
+    public string fenCode;
     
     /*
     -1 = None
@@ -21,21 +23,23 @@ public class GameManager : MonoBehaviour
     11 = Black King
     */
 
-    private void Start()
-    {
-        print(PieceType.Rook + (int)PieceColor.Black);
-    }
     
-    private void CreateBoard(string fenCode = "")
+    [Button]
+    private void CreateBoard()
     {
-        grid = new int[gridSize.x * gridSize.y];
-        for (int i = 0; i < gridSize.x; i++)
+        if(fenCode == null)
         {
-            for (int f = 0; f < gridSize.x; f++)
+            grid = new int[gridSize.x * gridSize.y];
+            for (int i = 0; i < gridSize.x * gridSize.y; i++)
             {
-                grid[i+f] = -1;
+                grid[i] = -1;
             }
         }
+        else
+        {
+            grid = FenConvertor.GetGridFromFen(fenCode);
+        }
+        PieceRenderer.Instance.RenderNewBoard(grid);
     }
     
     

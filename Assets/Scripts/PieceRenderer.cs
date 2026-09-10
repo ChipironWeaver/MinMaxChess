@@ -31,24 +31,34 @@ public class PieceRenderer : MonoBehaviour
         
         for (int i = 0; i < grid.Length; i++)
         {
-            if(grid[i] == -1) continue;
-            
-            (PieceColor,PieceType) piece = GameManager.GetPiece(grid[i]);
-            PieceColor pieceColor = piece.Item1;
-            PieceType pieceType = piece.Item2;
-            
-            GameObject newPiece = new GameObject();
-            newPiece.transform.parent = transform;
-            newPiece.transform.localPosition = new Vector3(i % 8 * _cellSize.x, i / 8 *  -_cellSize.y , 0);
-            newPiece.name = pieceColor + pieceType.ToString();
-            SpriteRenderer spriteRenderer = newPiece.AddComponent<SpriteRenderer>();
-            spriteRenderer.sortingOrder = 1;
-            spriteRenderer.sprite = GetSprite(grid[i]);
-            
-            _piecePosition.Add(i, spriteRenderer);
+            CreatePiece(grid[i], i);
         }
     }
 
+    public void CreatePiece(int pieceIndex,int gridPosition)
+    {
+        if (pieceIndex == -1) return;
+            
+        (PieceColor,PieceType) piece = GameManager.GetPiece(pieceIndex);
+        PieceColor pieceColor = piece.Item1;
+        PieceType pieceType = piece.Item2;
+            
+        GameObject newPiece = new GameObject();
+        newPiece.transform.parent = transform;
+        newPiece.transform.localPosition = new Vector3(gridPosition % 8 * _cellSize.x, gridPosition / 8 *  -_cellSize.y , 0);
+        newPiece.name = pieceColor + pieceType.ToString();
+        SpriteRenderer spriteRenderer = newPiece.AddComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = 1;
+        spriteRenderer.sprite = GetSprite(pieceIndex);
+            
+        _piecePosition.Add(gridPosition, spriteRenderer);
+    }
+    
+    public void SetPieceFollowCursor(int piecePosition)
+    {
+        
+    }
+    
     [Button]
     public void DestroyBoard()
     {
