@@ -167,6 +167,7 @@ MonoBehaviour:
   _camera: {fileID: 519420031}
   _gridSize: {x: 8, y: 8}
   _cellSize: {x: 1, y: 1}
+  _pieceMaterial: {fileID: 2100000, guid: cbd7ee5d28f00244ba6ed87e6dbecd69, type: 2}
   _snapSpeed: 0.125
   _resetSpeed: 0.25
   _whitePawn: {fileID: 1640199914835614593, guid: 08ccddcb6896e4547bff33714b068085, type: 3}
@@ -702,9 +703,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da94a297bc544e843afd19c1fce905fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  grid: 
+  grid: 070000000500000003000000090000000b000000ffffffff05000000070000000100000001000000ffffffff0100000001000000010000000100000001000000ffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffff03000000ffffffffffffffffffffffffffffffffffffffff0a000000ffffffff01000000ffffffff0800000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000ffffffff00000000ffffffff00000000ffffffffffffffff060000000400000002000000ffffffffffffffff020000000400000006000000
   gridSize: {x: 8, y: 8}
-  fenCode: rnbqk1nr/pp1ppppp/2P5/1P2b3/2K1p1QP/8/PP1P1P2/RNB2BNR
+  fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
