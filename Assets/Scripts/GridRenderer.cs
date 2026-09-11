@@ -17,8 +17,8 @@ public class GridRenderer : MonoBehaviour
     [SerializeField] private GameObject _cellNumbersPrefab;
     [Header("Cell Graphism")]
     [SerializeField] private Sprite _cellSprite;
-    [SerializeField] private Color _evenColor;
-    [SerializeField] private Color _oddColor;
+    public Color evenColor;
+    public Color oddColor;
     [SerializeField] private float _colorFadeDuration;
     [SerializeField] private Ease _colorFaceEase;
     [Header("HighlightType")]
@@ -49,7 +49,7 @@ public class GridRenderer : MonoBehaviour
                 cell.transform.localPosition = new Vector2(i * _cellSize.x, -f * _cellSize.y);
                 SpriteRenderer cellSpriteRenderer = cell.AddComponent<SpriteRenderer>();
                 cellSpriteRenderer.sprite = _cellSprite;
-                cellSpriteRenderer.color = (i+f) % 2  == 0 ? _evenColor : _oddColor;
+                cellSpriteRenderer.color = (i+f) % 2  == 0 ? evenColor : oddColor;
 
                 if (_showCellNumbers)
                 {
@@ -82,8 +82,8 @@ public class GridRenderer : MonoBehaviour
         {
             for (int f = 0; f < _gridSize.x; f++)
             {
-                if(instant) _cells[i][f].color = (i+f) % 2 == 0 ? _evenColor : _oddColor;
-                else _cells[i][f].DOColor((i+f) % 2 == 0 ? _evenColor : _oddColor,_colorFadeDuration).SetEase(_colorFaceEase);
+                if(instant) _cells[i][f].color = (i+f) % 2 == 0 ? evenColor : oddColor;
+                else _cells[i][f].DOColor((i+f) % 2 == 0 ? evenColor : oddColor,_colorFadeDuration).SetEase(_colorFaceEase);
             }
         }
     }
@@ -124,14 +124,14 @@ public class GridRenderer : MonoBehaviour
                 color = Color.magenta;
                 break;
         }
-        SetGridColor(position,Color.Lerp(color, (position % 8 + position / 8) % 2 == 0 ? _evenColor : _oddColor, _highlightStrenght));
+        SetGridColor(position,Color.Lerp(color, (position % 8 + position / 8) % 2 == 0 ? evenColor : oddColor, _highlightStrenght));
     }
 
     public void ResetSingularColor(int position, bool instant = false)
     {
         Vector2Int gridPos = new Vector2Int(position % 8, position / 8);
-        if(instant) _cells[gridPos.x][gridPos.y].color = (gridPos.x + gridPos.y) % 2 == 0 ? _evenColor : _oddColor;
-        else _cells[gridPos.x][gridPos.y].DOColor((gridPos.x + gridPos.y) % 2 == 0 ? _evenColor : _oddColor,_colorFadeDuration).SetEase(_colorFaceEase);
+        if(instant) _cells[gridPos.x][gridPos.y].color = (gridPos.x + gridPos.y) % 2 == 0 ? evenColor : oddColor;
+        else _cells[gridPos.x][gridPos.y].DOColor((gridPos.x + gridPos.y) % 2 == 0 ? evenColor : oddColor,_colorFadeDuration).SetEase(_colorFaceEase);
     }
     
     public void SetGridColor(int position, Color color, bool instant = false)

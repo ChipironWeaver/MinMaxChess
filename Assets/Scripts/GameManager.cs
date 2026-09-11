@@ -1,11 +1,16 @@
+using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
     public int[] grid;
     public Vector2Int gridSize = new Vector2Int(8,8);
     public string fenCode;
+    public PieceColor currentTurn;
+    public float backgroundStrengh;
+    public bool checkForColor = true;
     
     /*
     -1 = None
@@ -43,14 +48,30 @@ public class GameManager : MonoBehaviour
         {
             grid = FenConvertor.GetGridFromFen(fenCode);
         }
+
         PieceManager.Instance.RenderNewBoard(grid);
+        currentTurn = PieceColor.White;
+        if (Camera.main != null)
+            Camera.main.DOColor(Color.Lerp(currentTurn == PieceColor.White
+                ? GridRenderer.Instance.evenColor
+                : GridRenderer.Instance.oddColor, Color.black, backgroundStrengh) , 0.5f);
     }
 
-    public bool MovePiece((int x, int y) piece)
+    public bool MovePiece((int x, int y) piece, bool trust = false)
     {
         if (piece.x > 64 || piece.y > 64 || piece.x < 0 || piece.y < 0) return false;
+        if(grid[piece.x] % 2 != (int)currentTurn && checkForColor) 
+        {
+            print("NOT YOUR TURN");
+            return false;
+        }
+        if(LegalMove.GetLegalMove(grid, piece.x)[piece.y] == 0 && !trust) return false;
         
-        if(LegalMove.GetLegalMove(grid, piece.x)[piece.y] == 0) return false;
+        currentTurn =  currentTurn == PieceColor.White ?  PieceColor.Black : PieceColor.White;
+        if (Camera.main != null)
+            Camera.main.DOColor(Color.Lerp(currentTurn == PieceColor.White
+                ? GridRenderer.Instance.evenColor
+                : GridRenderer.Instance.oddColor, Color.black, backgroundStrengh) , 0.5f);
         
         grid[piece.y] =  grid[piece.x];
         grid[piece.x] = -1;

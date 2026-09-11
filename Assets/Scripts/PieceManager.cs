@@ -77,9 +77,12 @@ public class PieceManager : MonoBehaviour
         mousePos.y -= 4;
         mousePos.y *= -1;
         if (mousePos.x < 0 || mousePos.x > _gridSize.x || mousePos.y < 0 || mousePos.y > _gridSize.y) return -1;
-            
+        
         Vector2Int gridPosition = new Vector2Int((int)mousePos.x, (int)mousePos.y);
         
+        if ( GameManager.Instance.checkForColor
+            && GameManager.Instance.grid[gridPosition.x + gridPosition.y * 8] % 2
+            != (int)GameManager.Instance.currentTurn && _followerIndex == -1) return -1;
         return gridPosition.x + gridPosition.y * 8;
     }
 

@@ -167,7 +167,7 @@ MonoBehaviour:
   _camera: {fileID: 519420031}
   _gridSize: {x: 8, y: 8}
   _cellSize: {x: 1, y: 1}
-  _wobble: 0
+  _wobble: 1
   _pieceMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   _wobbleMaterial: {fileID: 2100000, guid: cbd7ee5d28f00244ba6ed87e6dbecd69, type: 2}
   _snapSpeed: 0.125
@@ -827,11 +827,11 @@ MonoBehaviour:
   _showCellNumbers: 0
   _cellNumbersPrefab: {fileID: 3389563247660562060, guid: 5ae710edda7ecfc4f8c91d7385f68bc0, type: 3}
   _cellSprite: {fileID: 7482667652216324306, guid: 4bd4ebff9f56c5546a0474db2a5074b7, type: 3}
-  _evenColor: {r: 1, g: 0.7884742, b: 0.5235849, a: 1}
-  _oddColor: {r: 0.6603774, g: 0.46071288, b: 0.2024742, a: 1}
+  evenColor: {r: 1, g: 0.8629301, b: 0.6933962, a: 1}
+  oddColor: {r: 0.3962264, g: 0.22308545, b: 0, a: 1}
   _colorFadeDuration: 0.2
   _colorFaceEase: 17
-  _highlightStrenght: 0.75
+  _highlightStrenght: 0.6
   _originalColor: {r: 0, g: 0.37524652, b: 1, a: 1}
   _legalMoveColor: {r: 0, g: 1, b: 0.25, a: 1}
   _pieceEatingColor: {r: 1, g: 0, b: 0.2857132, a: 1}
@@ -896,7 +896,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   grid: 070000000500000003000000090000000b000000ffffffff05000000070000000100000001000000ffffffff0100000001000000010000000100000001000000ffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffff03000000ffffffffffffffffffffffffffffffffffffffff0a000000ffffffff01000000ffffffff0800000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000ffffffff00000000ffffffff00000000ffffffffffffffff060000000400000002000000ffffffffffffffff020000000400000006000000
   gridSize: {x: 8, y: 8}
-  fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+  fenCode: 8/8/8/8/3Q4/8/8/8
+  currentTurn: 0
+  backgroundStrengh: 0.7
+  checkForColor: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
