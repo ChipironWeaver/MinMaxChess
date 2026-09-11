@@ -766,13 +766,13 @@ MonoBehaviour:
   _wobbleMaterial: {fileID: 2100000, guid: cbd7ee5d28f00244ba6ed87e6dbecd69, type: 2}
   _snapSpeed: 0.125
   _resetSpeed: 0.25
-  _whitePawn: {fileID: -5843330589442472984, guid: 6c9bffe52b33d2b478a3c6396768b055, type: 3}
+  _whitePawn: {fileID: 21300000, guid: 6c9bffe52b33d2b478a3c6396768b055, type: 3}
   _whiteBishop: {fileID: -5318376007367907048, guid: e398d4339363bfc4092742f1b1b1c8e3, type: 3}
   _whiteKnight: {fileID: -6639814976934125728, guid: 098d96aee62ec0f43872e1254c43254b, type: 3}
   _whiteRook: {fileID: 1208040086343421634, guid: a819b80355ed86e42af3dd3fe951f773, type: 3}
   _whiteQueen: {fileID: -7135165399232612806, guid: 67252c52e5ca2a1438ccc49c2c18bc75, type: 3}
   _whiteKing: {fileID: 664746300716784114, guid: 958cbfcd96f5c8e4d941013c418a032f, type: 3}
-  _blackPawn: {fileID: -5843330589442472984, guid: 4f5ddd1b192be224d91f0d40e1c8d73b, type: 3}
+  _blackPawn: {fileID: 21300000, guid: 4f5ddd1b192be224d91f0d40e1c8d73b, type: 3}
   _blackBishop: {fileID: -5318376007367907048, guid: d9e6be50605b8fc43820896e8fd2b9d7, type: 3}
   _blackKnight: {fileID: -6639814976934125728, guid: 6065579e33f838043a0b646bbf8b472d, type: 3}
   _blackRook: {fileID: 1208040086343421634, guid: 6b08ecfed1a067f4f93f463fbefa6c0b, type: 3}
@@ -827,8 +827,8 @@ MonoBehaviour:
   _showCellNumbers: 0
   _cellNumbersPrefab: {fileID: 3389563247660562060, guid: 5ae710edda7ecfc4f8c91d7385f68bc0, type: 3}
   _cellSprite: {fileID: 7482667652216324306, guid: 4bd4ebff9f56c5546a0474db2a5074b7, type: 3}
-  evenColor: {r: 1, g: 0.8629301, b: 0.6933962, a: 1}
-  oddColor: {r: 0.3962264, g: 0.22308545, b: 0, a: 1}
+  evenColor: {r: 1, g: 0.55128205, b: 0, a: 1}
+  oddColor: {r: 1, g: 0, b: 0.95554924, a: 1}
   _colorFadeDuration: 0.2
   _colorFaceEase: 17
   _highlightStrenght: 0.6
@@ -899,7 +899,7 @@ MonoBehaviour:
   fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
   currentTurn: 0
   backgroundStrengh: 0.7
-  checkForColor: 0
+  checkForColor: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
