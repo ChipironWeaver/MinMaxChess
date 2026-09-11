@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -6,12 +7,10 @@ public static class LegalMove
 {
     private static readonly (int,int)[] KingMoves = { (-1,-1) , (-1,-0) , (-1,1) , (0,-1) , (0,1), (1,-1) , (1,-0) , (1,1) };
     private static readonly (int,int)[] KnightMoves = { (-2,-1) , (-2,1) , (-1,-2) , (-1,2) , (2,-1) , (2,1) , (1,-2) , (1,2)};
+    private static readonly int[] PawnMove = {7,9};
     static public int[] GetLegalMove(int[] grid, int position)
     {
         PieceType piece = (PieceType)(grid[position] - grid[position]%2);
-        
-        
-        
         switch(piece)
         {
             case PieceType.Rook:
@@ -24,6 +23,8 @@ public static class LegalMove
                 return GetLegalMoveFromArray(grid, position,KingMoves);
             case PieceType.Knight:
                 return GetLegalMoveFromArray(grid, position,KnightMoves);
+            case PieceType.Pawn:
+                return GetPawnLegalMove(grid, position);
             default:
             {
                 Debug.LogWarning("No legal move for position " + position + " for " + grid[position].ToString());
@@ -231,6 +232,45 @@ public static class LegalMove
             legalMoves[i] = 1;
         }
         
+        return legalMoves;
+    }
+
+    static public int[] GetPawnLegalMove(int[] grid, int position)
+    {
+        int[] legalMoves = new int[64];
+        PieceColor color = (PieceColor)(grid[position] - PieceType.Pawn);
+        int height = position/8;
+        int direction = PieceColor.White == color ? -1 : 1;
+        
+        if (position + 8 * direction is > 0 and < 64)
+        {
+            if (grid[position + 8 * direction] != -1)
+            {
+                if (grid[position + 8 * direction] % 2 != (int)color) legalMoves[position + 8 * direction] = 2;
+            }
+            else
+            {
+                legalMoves[position + 8 * direction] = 1;
+                if (height == (color == PieceColor.White ? 6 : 1) && position + 16 * direction is > 0 and < 64 )
+                {
+                    if (grid[position + 16 * direction ] != -1)
+                    {
+                        if (grid[position + 16 * direction ] % 2 != (int)color) legalMoves[position + 16 * direction ] = 2;
+                        
+                    }
+                    else legalMoves[position + 16 * direction ] = 1;
+                }
+            }
+        }
+
+        foreach (int i in PawnMove)
+        {
+            int f = i * direction + position;
+            if (f is > 0 and < 64 && f / 8 == height + direction)
+            {
+                if(grid[f] % 2 != (int)color && grid[f] != -1) legalMoves[f] = 2;
+            }
+        }
         return legalMoves;
     }
 

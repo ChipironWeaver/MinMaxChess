@@ -108,6 +108,7 @@ public class PieceManager : MonoBehaviour
         Vector3 position = new Vector3(piecePosition % 8 * _cellSize.x, piecePosition / 8 * -_cellSize.y, 0);
         if(moveSpeed == 0) _piecePosition[piecePosition].transform.localPosition = position;
         else _piecePosition[piecePosition].transform.DOLocalMove(position,moveSpeed).SetEase(Ease.InOutQuad);
+        GridRenderer.Instance.ResetGridColors();
     }
     
     public void SetPieceFollowCursor(int piecePosition)

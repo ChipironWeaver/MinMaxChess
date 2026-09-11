@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
+using TMPro;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,7 +13,8 @@ public class GridRenderer : MonoBehaviour
     [Header("Grid Settings")]
     [SerializeField] private Vector2Int _gridSize;
     [SerializeField] private Vector2 _cellSize;
-    
+    [SerializeField] private bool _showCellNumbers;
+    [SerializeField] private GameObject _cellNumbersPrefab;
     [Header("Cell Graphism")]
     [SerializeField] private Sprite _cellSprite;
     [SerializeField] private Color _evenColor;
@@ -41,7 +43,6 @@ public class GridRenderer : MonoBehaviour
             _cells.Add(new List<SpriteRenderer>());
             for (int f = 0; f < _gridSize.x; f++)
             {
-                print(i + " : " + f);
                 GameObject cell = new GameObject();
                 cell.name = "Cell" + i + " : "+  f;
                 cell.transform.parent = transform;
@@ -49,6 +50,14 @@ public class GridRenderer : MonoBehaviour
                 SpriteRenderer cellSpriteRenderer = cell.AddComponent<SpriteRenderer>();
                 cellSpriteRenderer.sprite = _cellSprite;
                 cellSpriteRenderer.color = (i+f) % 2  == 0 ? _evenColor : _oddColor;
+
+                if (_showCellNumbers)
+                {
+                    GameObject cellNumbers = Instantiate(_cellNumbersPrefab, cell.transform);
+                    cellNumbers.name = (i + f*8).ToString();
+                    cellNumbers.GetComponentInChildren<TextMeshProUGUI>().text = (i + f*8).ToString();
+                }
+                
                 
                 _cells[i].Add(cellSpriteRenderer);
             }
