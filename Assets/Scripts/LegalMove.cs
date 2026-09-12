@@ -93,7 +93,7 @@ public static class LegalMove
         
         for (int i = position; i >= 0; i -= 9)
         {
-            if (i % 8 == 7) break;
+            if (i % 8 == 7 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
                 if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
@@ -104,7 +104,7 @@ public static class LegalMove
         }
         for (int i = position; i >= 0; i -= 7)
         {
-            if (i % 8 == 0) break;
+            if (i % 8 == 0 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
                 if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
@@ -115,10 +115,10 @@ public static class LegalMove
         }
         for (int i = position; i < 64; i += 7)
         {
-            if (i % 8 == 7) break;
+            if (i % 8 == 7 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
-                if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
+                if(grid[i] % 2 != (int)color) legalMoves[i] = 2; 
                 
                 break;
             }
@@ -126,7 +126,7 @@ public static class LegalMove
         }
         for (int i = position; i < 64; i += 9)
         {
-            if (i % 8 == 0) break;
+            if (i % 8 == 0 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
                 if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
@@ -145,7 +145,7 @@ public static class LegalMove
         
         for (int i = position; i >= 0; i -= 9)
         {
-            if (i % 8 == 7) break;
+            if (i % 8 == 7 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
                 if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
@@ -156,7 +156,7 @@ public static class LegalMove
         }
         for (int i = position; i >= 0; i -= 7)
         {
-            if (i % 8 == 0) break;
+            if (i % 8 == 0 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
                 if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
@@ -167,10 +167,10 @@ public static class LegalMove
         }
         for (int i = position; i < 64; i += 7)
         {
-            if (i % 8 == 7) break;
+            if (i % 8 == 7 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
-                if(grid[i] % 2 != (int)color) legalMoves[i] = 2;
+                if(grid[i] % 2 != (int)color) legalMoves[i] = 2; 
                 
                 break;
             }
@@ -178,7 +178,7 @@ public static class LegalMove
         }
         for (int i = position; i < 64; i += 9)
         {
-            if (i % 8 == 0) break;
+            if (i % 8 == 0 && i != position) break;
             if (grid[i] != -1 && i != position)
             {
                 if(grid[i] % 2 != (int)color) legalMoves[i] = 2;

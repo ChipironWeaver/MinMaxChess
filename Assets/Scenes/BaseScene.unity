@@ -167,7 +167,7 @@ MonoBehaviour:
   _camera: {fileID: 519420031}
   _gridSize: {x: 8, y: 8}
   _cellSize: {x: 1, y: 1}
-  _wobble: 1
+  _wobble: 0
   _pieceMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   _wobbleMaterial: {fileID: 2100000, guid: cbd7ee5d28f00244ba6ed87e6dbecd69, type: 2}
   _snapSpeed: 0.125
@@ -827,8 +827,8 @@ MonoBehaviour:
   _showCellNumbers: 0
   _cellNumbersPrefab: {fileID: 3389563247660562060, guid: 5ae710edda7ecfc4f8c91d7385f68bc0, type: 3}
   _cellSprite: {fileID: 7482667652216324306, guid: 4bd4ebff9f56c5546a0474db2a5074b7, type: 3}
-  evenColor: {r: 1, g: 0.55128205, b: 0, a: 1}
-  oddColor: {r: 1, g: 0, b: 0.95554924, a: 1}
+  evenColor: {r: 0.8962264, g: 0.76204115, b: 0.5960751, a: 1}
+  oddColor: {r: 0.6037736, g: 0.32933107, b: 0, a: 1}
   _colorFadeDuration: 0.2
   _colorFaceEase: 17
   _highlightStrenght: 0.6
@@ -899,7 +899,7 @@ MonoBehaviour:
   fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
   currentTurn: 0
   backgroundStrengh: 0.7
-  checkForColor: 1
+  checkForColor: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
