@@ -898,7 +898,7 @@ MonoBehaviour:
   grid: 070000000500000003000000090000000b000000ffffffff05000000070000000100000001000000ffffffff0100000001000000010000000100000001000000ffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffff03000000ffffffffffffffffffffffffffffffffffffffff0a000000ffffffff01000000ffffffff0800000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000ffffffff00000000ffffffff00000000ffffffffffffffff060000000400000002000000ffffffffffffffff020000000400000006000000
   gridInfo: 
   gridSize: {x: 8, y: 8}
-  fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+  fenCode: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3K2R
   backgroundStrengh: 0.7
   checkForColor: 1
 --- !u!1660057539 &9223372036854775807

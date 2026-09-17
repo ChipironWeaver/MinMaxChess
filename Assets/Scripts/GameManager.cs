@@ -82,23 +82,53 @@ public class GameManager : MonoBehaviour
         
         if(currentLegalMove[piece.x][piece.y] == 0 && !trust) return false;
         
-        if ((PieceType)(grid[piece.x] - grid[piece.x] % 2) == PieceType.Pawn && Mathf.Abs(piece.x/8 - piece.y/8) == 2)
-        {
-            Debug.Log("Bitch did a nice double move");
-            gridInfo[1] = piece.y;
-        }
+        PieceColor pieceColor = (PieceColor)(grid[piece.x] % 2);
+        PieceType pieceType = (PieceType)(grid[piece.x] - pieceColor);
+        
+        if (pieceType == PieceType.Pawn && Mathf.Abs(piece.x/8 - piece.y/8) == 2) gridInfo[1] = piece.y;
         else gridInfo[1] = -1;
 
+        if (pieceType == PieceType.King)
+        {
+            if (pieceColor == PieceColor.White)
+            {
+                if (gridInfo[2] % 2 == 1)
+                {
+                    print("RESET BIG ROOK WHITE");
+                    gridInfo[2] -= 1;
+                }
+                if (gridInfo[3] % 2 == 1)
+                {
+                    print("RESET SMALL ROOK WHITE");
+                    gridInfo[3] -= 1;
+                }
+            }
+            else
+            {
+                if (gridInfo[2] / 2 == 1)
+                {
+                    print("RESET BIG ROOK BLACK");
+                    gridInfo[2] -= 2;
+                }
+                if (gridInfo[3] / 2 == 1)
+                {
+                    print("RESET SMALL ROOK BLACK");
+                    gridInfo[3] -= 2;
+                }
+            }
+        }
+        
         if (currentLegalMove[piece.x][piece.y] == 3)
         {
-            
             int enPassantPiece = piece.y + (grid[piece.x] % 2 ==  0 ? 8 : -8 ) ;
-            print(enPassantPiece);
             PieceManager.Instance.DestroyPiece(enPassantPiece);
             grid[enPassantPiece] = -1;
             Debug.Log("EnPassant");
         }
-        
+        else if (currentLegalMove[piece.x][piece.y] == 4)
+        {
+            print("CASTLING");
+        }
         gridInfo[0] =  gridInfo[0] == (int)PieceColor.White ?  (int)PieceColor.Black : (int)PieceColor.White;
         
         grid[piece.y] =  grid[piece.x];

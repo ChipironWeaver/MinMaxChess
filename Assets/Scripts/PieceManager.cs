@@ -128,14 +128,11 @@ public class PieceManager : MonoBehaviour
                     {
                         if (GameManager.Instance.MovePiece((_followerIndex, currentIndex)))
                         {
-                            DestroyPiece(currentIndex);
-                            SpriteRenderer spriteRenderer = _piecePosition[_followerIndex];
-                            _piecePosition.Remove(_followerIndex);
-                            _followerIndex = currentIndex;
-                            _piecePosition.Add(currentIndex, spriteRenderer);
+                            MovePiece((_followerIndex, currentIndex));
                         }
+                        else ResetPiecePos(_followerIndex,_snapSpeed);
                     }
-                    ResetPiecePos(_followerIndex,_snapSpeed);
+                    else ResetPiecePos(_followerIndex,_snapSpeed);
                     GridRenderer.Instance.ResetGridColors();
                     
                 }
@@ -155,7 +152,15 @@ public class PieceManager : MonoBehaviour
             else Debug.Log("Clicker on no piece position: " + piecePosition);
         }
     }
-    
+
+    public void MovePiece((int before, int after)  piecePosition, bool instant = false)
+    {
+        DestroyPiece(piecePosition.after);
+        SpriteRenderer spriteRenderer = _piecePosition[piecePosition.before];
+        _piecePosition.Remove(piecePosition.after);
+        _piecePosition.Add(piecePosition.after, spriteRenderer);
+        ResetPiecePos(piecePosition.after, instant ? 0 : _snapSpeed);
+    }
     [Button]
     public void DestroyBoard()
     {

@@ -100,7 +100,8 @@ public class GridRenderer : MonoBehaviour
         {
             if (legalMoves[i] > 0)
             {
-                if (legalMoves[i] >= 2) SetHightlight(Highlights.PieceEatingColor,i);
+                if (legalMoves[i] == 4) SetHightlight(Highlights.Debug,i);
+                else if(legalMoves[i] >= 2) SetHightlight(Highlights.PieceEatingColor,i);
                 else SetHightlight(Highlights.LegalColor,i);
             }
         }
@@ -119,6 +120,9 @@ public class GridRenderer : MonoBehaviour
                 break;
             case Highlights.PieceEatingColor:
                 color = _pieceEatingColor;
+                break;
+            case Highlights.Debug:
+                color =  Color.orangeRed;
                 break;
             default:
                 color = Color.magenta;
@@ -183,5 +187,6 @@ public class GridRenderer : MonoBehaviour
         OriginalColor,
         LegalColor,
         PieceEatingColor,
+        Debug
     }
 }

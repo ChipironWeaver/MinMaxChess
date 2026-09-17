@@ -304,7 +304,14 @@ public static class LegalMove
         return legalMoves;
     }
 
-
+    static public int[] GetKingLegalMove(int[] grid, int[] gridInfo, int position)
+    {
+        int[] legalMoves =  GetLegalMoveFromArray(grid,position,KingMoves);
+        
+        
+        
+        return legalMoves;
+    }
     static public int[] GetLegalMoveFromArray(int[] grid, int position, (int,int)[] moveArray)
     {
         int[] legalMoves = new int[64];
