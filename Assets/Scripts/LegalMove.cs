@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -8,7 +9,7 @@ public static class LegalMove
     private static readonly (int,int)[] KingMoves = { (-1,-1) , (-1,-0) , (-1,1) , (0,-1) , (0,1), (1,-1) , (1,-0) , (1,1) };
     private static readonly (int,int)[] KnightMoves = { (-2,-1) , (-2,1) , (-1,-2) , (-1,2) , (2,-1) , (2,1) , (1,-2) , (1,2)};
     private static readonly int[] PawnMove = {7,9};
-    static public int[] GetLegalMove(int[] grid, int position)
+    static public int[] GetLegalMove(int[] grid, int[] gridInfo , int position)
     {
         PieceType piece = (PieceType)(grid[position] - grid[position]%2);
         switch(piece)
@@ -31,6 +32,22 @@ public static class LegalMove
                 return new int[64];
             }
         }
+    }
+
+    static public Dictionary<int, int[]> GetAllLegalMoves(int[] grid, int[] gridInfo)
+    {
+        Dictionary<int, int[]> dick =  new Dictionary<int, int[]>();
+
+        int color = gridInfo[0];
+        for (int i = 0; i < 64; i++)
+        {
+            Debug.Log(i);
+            if (grid[i] % 2 == color)
+            {
+                dick.Add(i,GetLegalMove(grid, gridInfo, i));
+            }
+        }
+        return dick;
     }
 
 

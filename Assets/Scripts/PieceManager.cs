@@ -82,7 +82,7 @@ public class PieceManager : MonoBehaviour
         
         if ( GameManager.Instance.checkForColor
             && GameManager.Instance.grid[gridPosition.x + gridPosition.y * 8] % 2
-            != (int)GameManager.Instance.currentTurn && _followerIndex == -1) return -1;
+            != GameManager.Instance.gridInfo[0] && _followerIndex == -1) return -1;
         return gridPosition.x + gridPosition.y * 8;
     }
 

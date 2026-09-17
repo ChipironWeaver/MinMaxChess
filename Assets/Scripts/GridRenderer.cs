@@ -90,7 +90,7 @@ public class GridRenderer : MonoBehaviour
 
     public void ShowLegalMoves(int position)
     {
-        int[] legalMoves = LegalMove.GetLegalMove(GameManager.Instance.grid, position);
+        int[] legalMoves = GameManager.Instance.currentLegalMove[position];
         if(legalMoves == null)
         {
             print("No legal moves found");
