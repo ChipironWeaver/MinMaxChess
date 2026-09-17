@@ -87,7 +87,46 @@ public class GameManager : MonoBehaviour
         
         if (pieceType == PieceType.Pawn && Mathf.Abs(piece.x/8 - piece.y/8) == 2) gridInfo[1] = piece.y;
         else gridInfo[1] = -1;
-
+        
+        if (currentLegalMove[piece.x][piece.y] == 3)
+        {
+            int enPassantPiece = piece.y + (grid[piece.x] % 2 ==  0 ? 8 : -8 ) ;
+            PieceManager.Instance.DestroyPiece(enPassantPiece);
+            grid[enPassantPiece] = -1;
+            Debug.Log("EnPassant");
+        }
+        else if (currentLegalMove[piece.x][piece.y] == 4)
+        {
+            print("MANAGER CASTLING");
+            switch (piece.y)
+            {
+                case 58:
+                    grid[56] = -1;
+                    grid[59] = 6;
+                    PieceManager.Instance.MovePiece((56,59));
+                    break;
+                case 62:
+                    grid[63] = -1;
+                    grid[61] = 6;
+                    PieceManager.Instance.MovePiece((63,61));
+                    break;
+                case 2:
+                    grid[0] = -1;
+                    grid[3] = 7;
+                    PieceManager.Instance.MovePiece((0,3));
+                    break;
+                case 6:
+                    grid[7] = -1;
+                    grid[5] = 7;
+                    PieceManager.Instance.MovePiece((7,5));
+                    break;
+                default:
+                    print("MANAGER CANCEL CASTLING" + piece.y);
+                    break;
+            }
+        }
+        gridInfo[0] =  gridInfo[0] == (int)PieceColor.White ?  (int)PieceColor.Black : (int)PieceColor.White;
+        
         if (pieceType == PieceType.King)
         {
             if (pieceColor == PieceColor.White)
@@ -117,19 +156,35 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        
-        if (currentLegalMove[piece.x][piece.y] == 3)
+        if (pieceType == PieceType.Rook)
         {
-            int enPassantPiece = piece.y + (grid[piece.x] % 2 ==  0 ? 8 : -8 ) ;
-            PieceManager.Instance.DestroyPiece(enPassantPiece);
-            grid[enPassantPiece] = -1;
-            Debug.Log("EnPassant");
+            if (pieceColor == PieceColor.White)
+            {
+                if (gridInfo[2] % 2 == 1 && piece.x == 56)
+                {
+                    print("RESET BIG ROOK WHITE");
+                    gridInfo[2] -= 1;
+                }
+                if (gridInfo[3] % 2 == 1 && piece.x == 63)
+                {
+                    print("RESET SMALL ROOK WHITE");
+                    gridInfo[3] -= 1;
+                }
+            }
+            else
+            {
+                if (gridInfo[2] / 2 == 1 && piece.x == 0)
+                {
+                    print("RESET BIG ROOK BLACK");
+                    gridInfo[2] -= 2;
+                }
+                if (gridInfo[3] / 2 == 1 && piece.x == 7)
+                {
+                    print("RESET SMALL ROOK BLACK");
+                    gridInfo[3] -= 2;
+                }
+            }
         }
-        else if (currentLegalMove[piece.x][piece.y] == 4)
-        {
-            print("CASTLING");
-        }
-        gridInfo[0] =  gridInfo[0] == (int)PieceColor.White ?  (int)PieceColor.Black : (int)PieceColor.White;
         
         grid[piece.y] =  grid[piece.x];
         grid[piece.x] = -1;

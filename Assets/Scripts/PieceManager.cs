@@ -157,7 +157,7 @@ public class PieceManager : MonoBehaviour
     {
         DestroyPiece(piecePosition.after);
         SpriteRenderer spriteRenderer = _piecePosition[piecePosition.before];
-        _piecePosition.Remove(piecePosition.after);
+        _piecePosition.Remove(piecePosition.before);
         _piecePosition.Add(piecePosition.after, spriteRenderer);
         ResetPiecePos(piecePosition.after, instant ? 0 : _snapSpeed);
     }

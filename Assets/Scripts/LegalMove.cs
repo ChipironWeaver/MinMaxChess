@@ -9,6 +9,9 @@ public static class LegalMove
     private static readonly (int,int)[] KingMoves = { (-1,-1) , (-1,-0) , (-1,1) , (0,-1) , (0,1), (1,-1) , (1,-0) , (1,1) };
     private static readonly (int,int)[] KnightMoves = { (-2,-1) , (-2,1) , (-1,-2) , (-1,2) , (2,-1) , (2,1) , (1,-2) , (1,2)};
     private static readonly int[] PawnMove = {7,9};
+    
+    private static readonly int[] BigCastling = {-1,-2,-3};
+    private static readonly int[] SmallCastling = {1,2};
     static public int[] GetLegalMove(int[] grid, int[] gridInfo , int position)
     {
         PieceType piece = (PieceType)(grid[position] - grid[position]%2);
@@ -21,7 +24,7 @@ public static class LegalMove
             case PieceType.Queen:
                 return GetQueenLegalMove(grid, position);
             case PieceType.King:
-                return GetLegalMoveFromArray(grid, position,KingMoves);
+                return GetKingLegalMove(grid, gridInfo, position);
             case PieceType.Knight:
                 return GetLegalMoveFromArray(grid, position,KnightMoves);
             case PieceType.Pawn:
@@ -274,10 +277,8 @@ public static class LegalMove
                 {
                     if(gridInfo[1]/8 == height )
                     {
-                        Debug.Log("THIS IS A POTENTIAL");
                         if (Mathf.Abs(gridInfo[1] - position) == 1)
                         {
-                            Debug.Log("en passant?");
                             legalMoves[gridInfo[1] + 8 * direction] = 3;
                         }
                     } 
@@ -308,7 +309,53 @@ public static class LegalMove
     {
         int[] legalMoves =  GetLegalMoveFromArray(grid,position,KingMoves);
         
-        
+        if (grid[position] % 2 == (int)PieceColor.White)
+        {
+            if (gridInfo[2] % 2 == 1)
+            {
+                Debug.Log("castling 1");
+                legalMoves[position - 2] = 4;
+                foreach (int i in BigCastling)
+                {
+                    if (grid[position + i] != -1)
+                    {
+                        Debug.Log("cancel castling");
+                        legalMoves[position - 2] = 0;
+                        break;
+                    }
+                }
+            }
+            if (gridInfo[3] % 2 == 1)
+            {
+                Debug.Log("castling 2");
+                legalMoves[position + 2] = 4;
+                foreach (int i in SmallCastling)
+                {
+                    if (grid[position + i] != -1) legalMoves[position + 2] = 0;
+                }
+            }
+        }
+        else
+        {
+            if (gridInfo[2] / 2 == 1)
+            {
+                Debug.Log("castling 3");
+                legalMoves[position - 2] = 4;
+                foreach (int i in BigCastling)
+                {
+                    if (grid[position + i] != -1) legalMoves[position - 2] = 0;
+                }
+            }
+            if (gridInfo[3] / 2 == 1)
+            {
+                Debug.Log("castling 4");
+                legalMoves[position + 2] = 4;
+                foreach (int i in SmallCastling)
+                {
+                    if (grid[position + i] != -1) legalMoves[position + 2] = 0;
+                }
+            }
+        }        
         
         return legalMoves;
     }
