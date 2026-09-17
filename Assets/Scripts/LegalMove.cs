@@ -25,7 +25,7 @@ public static class LegalMove
             case PieceType.Knight:
                 return GetLegalMoveFromArray(grid, position,KnightMoves);
             case PieceType.Pawn:
-                return GetPawnLegalMove(grid, position);
+                return GetPawnLegalMove(grid,gridInfo, position);
             default:
             {
                 Debug.LogWarning("No legal move for position " + position + " for " + grid[position].ToString());
@@ -41,7 +41,6 @@ public static class LegalMove
         int color = gridInfo[0];
         for (int i = 0; i < 64; i++)
         {
-            Debug.Log(i);
             if (grid[i] % 2 == color)
             {
                 dick.Add(i,GetLegalMove(grid, gridInfo, i));
@@ -252,7 +251,7 @@ public static class LegalMove
         return legalMoves;
     }
 
-    static public int[] GetPawnLegalMove(int[] grid, int position)
+    static public int[] GetPawnLegalMove(int[] grid,int[] gridInfo ,int position)
     {
         int[] legalMoves = new int[64];
         PieceColor color = (PieceColor)(grid[position] - PieceType.Pawn);
@@ -263,17 +262,31 @@ public static class LegalMove
         {
             if (grid[position + 8 * direction] != -1)
             {
-                if (grid[position + 8 * direction] % 2 != (int)color) legalMoves[position + 8 * direction] = 2;
+                if (grid[position + 8 * direction] % 2 != (int)color)
+                {
+                    legalMoves[position + 8 * direction] = 2;
+                }
             }
             else
             {
                 legalMoves[position + 8 * direction] = 1;
+                if (gridInfo[1] > -1)
+                {
+                    if(gridInfo[1]/8 == height )
+                    {
+                        Debug.Log("THIS IS A POTENTIAL");
+                        if (Mathf.Abs(gridInfo[1] - position) == 1)
+                        {
+                            Debug.Log("en passant?");
+                            legalMoves[gridInfo[1] + 8 * direction] = 3;
+                        }
+                    } 
+                }
                 if (height == (color == PieceColor.White ? 6 : 1) && position + 16 * direction is > 0 and < 64 )
                 {
                     if (grid[position + 16 * direction ] != -1)
                     {
                         if (grid[position + 16 * direction ] % 2 != (int)color) legalMoves[position + 16 * direction ] = 2;
-                        
                     }
                     else legalMoves[position + 16 * direction ] = 1;
                 }

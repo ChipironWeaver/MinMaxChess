@@ -100,7 +100,7 @@ public class GridRenderer : MonoBehaviour
         {
             if (legalMoves[i] > 0)
             {
-                if (legalMoves[i] == 2) SetHightlight(Highlights.PieceEatingColor,i);
+                if (legalMoves[i] >= 2) SetHightlight(Highlights.PieceEatingColor,i);
                 else SetHightlight(Highlights.LegalColor,i);
             }
         }

@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
+    public bool changeVisual;
     public int[] grid;
     public int[] gridInfo; // current moving color | position of the last en passantable pawn | left rook(1 = white, 2 = black, 3 = both), right rook)
     public Vector2Int gridSize = new Vector2Int(8,8);
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
                 : GridRenderer.Instance.oddColor, Color.black, backgroundStrengh) , 0.5f);
     }
 
-    public bool MovePiece((int x, int y) piece, bool trust = false)
+    public bool MovePiece((int x, int y) piece, bool trust = false, bool movePiece = false)
     {
         if (piece.x > 64 || piece.y > 64 || piece.x < 0 || piece.y < 0) return false;
         if(grid[piece.x] % 2 != gridInfo[0] && checkForColor) 
@@ -78,19 +79,36 @@ public class GameManager : MonoBehaviour
             print("NOT YOUR TURN");
             return false;
         }
-        //if(LegalMove.GetLegalMove(grid, gridInfo, piece.x)[piece.y] == 0 && !trust) return false;
+        
         if(currentLegalMove[piece.x][piece.y] == 0 && !trust) return false;
         
+        if ((PieceType)(grid[piece.x] - grid[piece.x] % 2) == PieceType.Pawn && Mathf.Abs(piece.x/8 - piece.y/8) == 2)
+        {
+            Debug.Log("Bitch did a nice double move");
+            gridInfo[1] = piece.y;
+        }
+        else gridInfo[1] = -1;
+
+        if (currentLegalMove[piece.x][piece.y] == 3)
+        {
+            
+            int enPassantPiece = piece.y + (grid[piece.x] % 2 ==  0 ? 8 : -8 ) ;
+            print(enPassantPiece);
+            PieceManager.Instance.DestroyPiece(enPassantPiece);
+            grid[enPassantPiece] = -1;
+            Debug.Log("EnPassant");
+        }
+        
         gridInfo[0] =  gridInfo[0] == (int)PieceColor.White ?  (int)PieceColor.Black : (int)PieceColor.White;
-        if (Camera.main != null)
-            Camera.main.DOColor(Color.Lerp(gridInfo[0] == (int)PieceColor.White
-                ? GridRenderer.Instance.evenColor
-                : GridRenderer.Instance.oddColor, Color.black, backgroundStrengh) , 0.5f);
         
         grid[piece.y] =  grid[piece.x];
         grid[piece.x] = -1;
 
         currentLegalMove = LegalMove.GetAllLegalMoves(grid, gridInfo);
+        if (Camera.main != null&changeVisual)
+            Camera.main.DOColor(Color.Lerp(gridInfo[0] == (int)PieceColor.White
+                ? GridRenderer.Instance.evenColor
+                : GridRenderer.Instance.oddColor, Color.black, backgroundStrengh) , 0.5f);
         
         return true;
     }
