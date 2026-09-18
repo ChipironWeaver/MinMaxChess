@@ -13,13 +13,10 @@ public class FenConvertor : MonoBehaviour
 
         int index = 0;
         string lowerFen = fen.ToLower();
-        int previousIndex = 0;
         for(int i = 0; i < fen.Length; i++)
         {
-            previousIndex = index;
             bool isPiece = false;
             char c = lowerFen[i];
-            print(index + " AT " + i + " AKA " + c);
             if (index >= 64) return grid;
             switch (c)
             {

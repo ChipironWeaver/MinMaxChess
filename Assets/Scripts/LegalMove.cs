@@ -36,7 +36,6 @@ public static class LegalMove
             }
         }
     }
-
     static public Dictionary<int, int[]> GetAllLegalMoves(int[] grid, int[] gridInfo)
     {
         Dictionary<int, int[]> dick =  new Dictionary<int, int[]>();
@@ -51,8 +50,6 @@ public static class LegalMove
         }
         return dick;
     }
-
-
     static public int[] GetRookLegalMove(int[] grid, int position)
     {
         int[] legalMoves = new int[64];
@@ -253,7 +250,6 @@ public static class LegalMove
         
         return legalMoves;
     }
-
     static public int[] GetPawnLegalMove(int[] grid,int[] gridInfo ,int position)
     {
         int[] legalMoves = new int[64];
@@ -263,14 +259,7 @@ public static class LegalMove
         
         if (position + 8 * direction is > 0 and < 64)
         {
-            if (grid[position + 8 * direction] != -1)
-            {
-                if (grid[position + 8 * direction] % 2 != (int)color)
-                {
-                    legalMoves[position + 8 * direction] = 2;
-                }
-            }
-            else
+            if (grid[position + 8 * direction] == -1)
             {
                 legalMoves[position + 8 * direction] = 1;
                 if (gridInfo[1] > -1)
@@ -285,11 +274,7 @@ public static class LegalMove
                 }
                 if (height == (color == PieceColor.White ? 6 : 1) && position + 16 * direction is > 0 and < 64 )
                 {
-                    if (grid[position + 16 * direction ] != -1)
-                    {
-                        if (grid[position + 16 * direction ] % 2 != (int)color) legalMoves[position + 16 * direction ] = 2;
-                    }
-                    else legalMoves[position + 16 * direction ] = 1;
+                    if (grid[position + 16 * direction ] == -1) legalMoves[position + 16 * direction ] = 1;
                 }
             }
         }
@@ -304,7 +289,6 @@ public static class LegalMove
         }
         return legalMoves;
     }
-
     static public int[] GetKingLegalMove(int[] grid, int[] gridInfo, int position)
     {
         int[] legalMoves =  GetLegalMoveFromArray(grid,position,KingMoves);
