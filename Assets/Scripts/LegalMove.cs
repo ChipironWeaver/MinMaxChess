@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class LegalMove 
@@ -379,13 +381,14 @@ public static class LegalMove
                 break;
             }
         }
+        Dictionary<int, int[]> finalMove = moves.ToDictionary(key => key.Key, value => value.Value);
         
         foreach (int key in moves.Keys)
         {
-            moves[key] = CheckForCheck(moves[key], gameState,key, kingPos);
+            finalMove[key] = CheckForCheck(moves[key], gameState,key, kingPos);
         }
 
-        return moves;
+        return finalMove;
     }
 
     static public int[] CheckForCheck(int[] move, GameState gameState,int postion, int kingPosition = -1)

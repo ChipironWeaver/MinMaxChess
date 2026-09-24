@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
 
     public bool MovePiece((int x, int y) piece, bool trust = false, bool movePiece = false)
     {
+        print("meow");
         bool didMove = gameState.MovePiece(piece, trust);
         if (Camera.main != null & changeVisual & didMove)
             Camera.main.DOColor(Color.Lerp(gameState.gridInfo[0] == (int)PieceColor.White

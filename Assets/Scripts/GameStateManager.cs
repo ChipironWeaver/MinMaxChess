@@ -11,9 +11,8 @@ public struct GameState
     {
         if (piece.x > 64 || piece.y > 64 || piece.x < 0 || piece.y < 0) return false; // move outside the grid
         if (grid[piece.x] % 2 != gridInfo[0] && trust) return false; //Not your turn
-    
-    
-        if (currentLegalMove[piece.x][piece.y] == 0 && !trust) return false; //Illegal Move
+        
+        if(!trust) if(currentLegalMove[piece.x][piece.y] == 0) return false; //Illegal Move
     
         PieceColor pieceColor = (PieceColor)(grid[piece.x] % 2);
         PieceType pieceType = (PieceType)(grid[piece.x] - pieceColor);
@@ -22,41 +21,44 @@ public struct GameState
             gridInfo[1] = piece.y; //Changed the lattest pawn that did a double move, for the en passant
         else gridInfo[1] = -1;
     
-        if (currentLegalMove[piece.x][piece.y] == 3) //EN PASSANT
+        if(currentLegalMove != null)
         {
-            //This destroys the piece that got en passanted
-            int enPassantPiece = piece.y + (grid[piece.x] % 2 == 0 ? 8 : -8);
-            PieceManager.Instance.DestroyPiece(enPassantPiece);
-            grid[enPassantPiece] = -1;
-        }
-        else if (currentLegalMove[piece.x][piece.y] == 4) //CASTLING
-        {
-            switch (piece.y)
+            if (currentLegalMove[piece.x][piece.y] == 3) //EN PASSANT
             {
-                /*
-                This is definitely one code of all time so trust the process, This part is to manage the castling, it moves the rook to the correct position.
-                The values are hard codded since only 4 specific castling can even be played.
-                */
-                case 58: // BIG WHITE CASTLING
-                    grid[56] = -1; //56 = A1
-                    grid[59] = 6;
-                    PieceManager.Instance.MovePiece((56, 59));
-                    break;
-                case 62: // SMALL WHITE CASTLING
-                    grid[63] = -1; //56 = H1
-                    grid[61] = 6;
-                    PieceManager.Instance.MovePiece((63, 61));
-                    break;
-                case 2: // BIG BLACK CASTLING
-                    grid[0] = -1; //0 = A8
-                    grid[3] = 7;
-                    PieceManager.Instance.MovePiece((0, 3));
-                    break;
-                case 6: // SMALL BLACK CASTLING
-                    grid[7] = -1; //7 = H8
-                    grid[5] = 7;
-                    PieceManager.Instance.MovePiece((7, 5));
-                    break;
+                //This destroys the piece that got en passanted
+                int enPassantPiece = piece.y + (grid[piece.x] % 2 == 0 ? 8 : -8);
+                PieceManager.Instance.DestroyPiece(enPassantPiece);
+                grid[enPassantPiece] = -1;
+            }
+            else if (currentLegalMove[piece.x][piece.y] == 4) //CASTLING
+            {
+                switch (piece.y)
+                {
+                    /*
+                    This is definitely one code of all time so trust the process, This part is to manage the castling, it moves the rook to the correct position.
+                    The values are hard codded since only 4 specific castling can even be played.
+                    */
+                    case 58: // BIG WHITE CASTLING
+                        grid[56] = -1; //56 = A1
+                        grid[59] = 6;
+                        PieceManager.Instance.MovePiece((56, 59));
+                        break;
+                    case 62: // SMALL WHITE CASTLING
+                        grid[63] = -1; //56 = H1
+                        grid[61] = 6;
+                        PieceManager.Instance.MovePiece((63, 61));
+                        break;
+                    case 2: // BIG BLACK CASTLING
+                        grid[0] = -1; //0 = A8
+                        grid[3] = 7;
+                        PieceManager.Instance.MovePiece((0, 3));
+                        break;
+                    case 6: // SMALL BLACK CASTLING
+                        grid[7] = -1; //7 = H8
+                        grid[5] = 7;
+                        PieceManager.Instance.MovePiece((7, 5));
+                        break;
+                }
             }
         }
     
