@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public static class LegalMove 
@@ -12,43 +9,49 @@ public static class LegalMove
     
     private static readonly int[] BigCastling = {-1,-2,-3};
     private static readonly int[] SmallCastling = {1,2};
-    static public int[] GetLegalMove(int[] grid, int[] gridInfo , int position)
+    static public int[] GetLegalMove(GameState gameState, int position, bool checkForCheck)
     {
-        PieceType piece = (PieceType)(grid[position] - grid[position]%2);
+        PieceType piece = (PieceType)(gameState.grid[position] - gameState.grid[position]%2);
+        int[] legalMoves = null;
         switch(piece)
         {
             case PieceType.Rook:
-                return GetRookLegalMove(grid, position);
+                legalMoves = GetRookLegalMove(gameState.grid, position);
+                break;
             case PieceType.Bishop:
-                return GetBishopLegalMove(grid, position);
+                legalMoves = GetBishopLegalMove(gameState.grid, position);
+                break;
             case PieceType.Queen:
-                return GetQueenLegalMove(grid, position);
+                legalMoves = GetQueenLegalMove(gameState.grid, position);
+                break;
             case PieceType.King:
-                return GetKingLegalMove(grid, gridInfo, position);
+                legalMoves = GetKingLegalMove(gameState.grid, gameState.gridInfo, position);
+                break;
             case PieceType.Knight:
-                return GetLegalMoveFromArray(grid, position,KnightMoves);
+                legalMoves = GetLegalMoveFromArray(gameState.grid, position,KnightMoves);
+                break;
             case PieceType.Pawn:
-                return GetPawnLegalMove(grid,gridInfo, position);
-            default:
-            {
-                Debug.LogWarning("No legal move for position " + position + " for " + grid[position].ToString());
-                return new int[64];
-            }
+                legalMoves = GetPawnLegalMove(gameState.grid,gameState.gridInfo, position);
+                break;
         }
-    }
-    static public Dictionary<int, int[]> GetAllLegalMoves(int[] grid, int[] gridInfo)
-    {
-        Dictionary<int, int[]> dick =  new Dictionary<int, int[]>();
 
-        int color = gridInfo[0];
+
+        return checkForCheck ? CheckForCheck(legalMoves, gameState, position) :  legalMoves;
+    }
+    static public Dictionary<int, int[]> GetAllLegalMoves(GameState gameState, bool checkForCheck = true)
+    {
+        Dictionary<int, int[]> dic =  new Dictionary<int, int[]>();
+
+        int color = gameState.gridInfo[0];
         for (int i = 0; i < 64; i++)
         {
-            if (grid[i] % 2 == color)
+            if (gameState.grid[i] % 2 == color)
             {
-                dick.Add(i,GetLegalMove(grid, gridInfo, i));
+                dic.Add(i,GetLegalMove(gameState, i,false));
             }
         }
-        return dick;
+        
+        return checkForCheck ? CheckForCheck(dic, gameState) : dic;
     }
     static public int[] GetRookLegalMove(int[] grid, int position)
     {
@@ -364,4 +367,54 @@ public static class LegalMove
         }
         return legalMoves;
     }
+
+    static public Dictionary<int, int[]> CheckForCheck(Dictionary<int, int[]> moves, GameState gameState)
+    {
+        int kingPos = -1;
+        for(int i = 0 ; i < 64; i++)
+        {
+            if (gameState.grid[i] == (int)PieceType.King + gameState.gridInfo[0])
+            {
+                kingPos = i;
+                break;
+            }
+        }
+        
+        foreach (int key in moves.Keys)
+        {
+            moves[key] = CheckForCheck(moves[key], gameState,key, kingPos);
+        }
+
+        return moves;
+    }
+
+    static public int[] CheckForCheck(int[] move, GameState gameState,int postion, int kingPosition = -1)
+    {
+        bool isKingMoving = gameState.grid[postion] == (int)PieceType.King + gameState.gridInfo[0];
+        if(kingPosition == -1 && !isKingMoving) for(int i = 0 ; i < 64; i++)
+        {
+            if (gameState.grid[i] == (int)PieceType.King + gameState.gridInfo[0])
+            {
+                kingPosition = i;
+                break;
+            }
+        }
+
+        List<int> sortedMove = new List<int>();
+        
+        foreach (int i in move)
+        {
+            GameState tempState = gameState;
+            if (tempState.MovePiece((postion, i), true ,false))
+            {
+                Dictionary<int, int[]> tempCheck = GetAllLegalMoves(tempState, false);
+                
+                foreach (int[] val in tempCheck.Values) foreach (int pos in val) 
+                    if (pos != (isKingMoving ? i : kingPosition)) sortedMove.Add(i);
+            }
+        }
+        
+        return sortedMove.ToArray();
+    }
+    
 }

@@ -81,8 +81,8 @@ public class PieceManager : MonoBehaviour
         Vector2Int gridPosition = new Vector2Int((int)mousePos.x, (int)mousePos.y);
         
         if ( GameManager.Instance.checkForColor
-            && GameManager.Instance.grid[gridPosition.x + gridPosition.y * 8] % 2
-            != GameManager.Instance.gridInfo[0] && _followerIndex == -1) return -1;
+            && GameManager.Instance.gameState.grid[gridPosition.x + gridPosition.y * 8] % 2
+            != GameManager.Instance.gameState.gridInfo[0] && _followerIndex == -1) return -1;
         return gridPosition.x + gridPosition.y * 8;
     }
 
@@ -90,7 +90,7 @@ public class PieceManager : MonoBehaviour
     {
         if (pieceIndex == -1) return;
             
-        (PieceColor,PieceType) piece = GameManager.GetPiece(pieceIndex);
+        (PieceColor,PieceType) piece = GameState.GetPiece(pieceIndex);
         PieceColor pieceColor = piece.Item1;
         PieceType pieceType = piece.Item2;
             
@@ -195,7 +195,7 @@ public class PieceManager : MonoBehaviour
     public Sprite GetSprite(int pieceIndex)
     {
         
-        (PieceColor,PieceType) piece = GameManager.GetPiece(pieceIndex);
+        (PieceColor,PieceType) piece = GameState.GetPiece(pieceIndex);
         PieceColor pieceColor = piece.Item1;
         PieceType pieceType = piece.Item2;
         

@@ -58,7 +58,6 @@ public class GridRenderer : MonoBehaviour
                     cellNumbers.GetComponentInChildren<TextMeshProUGUI>().text = (i + f*8).ToString();
                 }
                 
-                
                 _cells[i].Add(cellSpriteRenderer);
             }
         }
@@ -90,7 +89,7 @@ public class GridRenderer : MonoBehaviour
 
     public void ShowLegalMoves(int position)
     {
-        int[] legalMoves = GameManager.Instance.currentLegalMove[position];
+        int[] legalMoves = GameManager.Instance.gameState.currentLegalMove[position];
         if(legalMoves == null)
         {
             print("No legal moves found");
@@ -100,8 +99,7 @@ public class GridRenderer : MonoBehaviour
         {
             if (legalMoves[i] > 0)
             {
-                if (legalMoves[i] == 4) SetHightlight(Highlights.Debug,i);
-                else if(legalMoves[i] >= 2) SetHightlight(Highlights.PieceEatingColor,i);
+                if(legalMoves[i] == 2) SetHightlight(Highlights.PieceEatingColor,i);
                 else SetHightlight(Highlights.LegalColor,i);
             }
         }
