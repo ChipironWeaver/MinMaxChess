@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public static class LegalMove 
@@ -52,8 +53,9 @@ public static class LegalMove
                 dic.Add(i,GetLegalMove(gameState, i,false));
             }
         }
+        dic = checkForCheck ? CheckForCheck(dic, gameState) : dic;
         
-        return checkForCheck ? CheckForCheck(dic, gameState) : dic;
+        return dic;
     }
     static public int[] GetRookLegalMove(int[] grid, int position)
     {
@@ -300,23 +302,20 @@ public static class LegalMove
         
         if (grid[position] % 2 == (int)PieceColor.White)
         {
-            if (gridInfo[2] % 2 == 1)
+            if (gridInfo[2] % 2 == 1 && grid[56] == 6)
             {
-                Debug.Log("castling 1");
                 legalMoves[position - 2] = 4;
                 foreach (int i in BigCastling)
                 {
                     if (grid[position + i] != -1)
                     {
-                        Debug.Log("cancel castling");
                         legalMoves[position - 2] = 0;
                         break;
                     }
                 }
             }
-            if (gridInfo[3] % 2 == 1)
+            if (gridInfo[3] % 2 == 1 && grid[63] == 6)
             {
-                Debug.Log("castling 2");
                 legalMoves[position + 2] = 4;
                 foreach (int i in SmallCastling)
                 {
@@ -326,18 +325,16 @@ public static class LegalMove
         }
         else
         {
-            if (gridInfo[2] / 2 == 1)
+            if (gridInfo[2] / 2 == 1 && grid[0] == 7)
             {
-                Debug.Log("castling 3");
                 legalMoves[position - 2] = 4;
                 foreach (int i in BigCastling)
                 {
                     if (grid[position + i] != -1) legalMoves[position - 2] = 0;
                 }
             }
-            if (gridInfo[3] / 2 == 1)
+            if (gridInfo[3] / 2 == 1 && grid[7] == 7)
             {
-                Debug.Log("castling 4");
                 legalMoves[position + 2] = 4;
                 foreach (int i in SmallCastling)
                 {
@@ -385,6 +382,7 @@ public static class LegalMove
         
         foreach (int key in moves.Keys)
         {
+            Debug.Log("Checking moves for key " + key);
             finalMove[key] = CheckForCheck(moves[key], gameState,key, kingPos);
         }
 
@@ -398,26 +396,38 @@ public static class LegalMove
         {
             if (gameState.grid[i] == (int)PieceType.King + gameState.gridInfo[0])
             {
+                Debug.Log("the king position is " + i);
                 kingPosition = i;
                 break;
             }
         }
-
-        List<int> sortedMove = new List<int>();
+        Debug.Log("the king position is " + kingPosition);
+        Debug.Log(ChipironUtility.GetListString(move));
         
-        foreach (int i in move)
+        for(int y = 0; y < 64; y++)
         {
-            GameState tempState = gameState;
-            if (tempState.MovePiece((postion, i), true ,false))
+            if(move[y] == 0) continue;
+            GameState tempState = gameState.Clone();
+            if (tempState.MovePiece((postion, y), true ,false))
             {
                 Dictionary<int, int[]> tempCheck = GetAllLegalMoves(tempState, false);
-                
-                foreach (int[] val in tempCheck.Values) foreach (int pos in val) 
-                    if (pos != (isKingMoving ? i : kingPosition)) sortedMove.Add(i);
+                foreach (int[] val in tempCheck.Values)
+                {
+                    for(int pos =  0; pos < val.Length; pos++)
+                    {
+                        if(val[pos] == 0) continue;
+                        if (pos == (isKingMoving ? y : kingPosition))
+                        {
+                            Debug.Log("Deleting move at : " + y);
+                            move[y] = 0;
+                        }
+                        
+                    }
+                }
             }
         }
         
-        return sortedMove.ToArray();
+        return move;
     }
     
 }

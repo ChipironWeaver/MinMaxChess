@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public struct GameState
@@ -12,7 +13,11 @@ public struct GameState
         if (piece.x > 64 || piece.y > 64 || piece.x < 0 || piece.y < 0) return false; // move outside the grid
         if (grid[piece.x] % 2 != gridInfo[0] && trust) return false; //Not your turn
         
-        if(!trust) if(currentLegalMove[piece.x][piece.y] == 0) return false; //Illegal Move
+        if(!trust)
+        {
+            Debug.Log(piece.x + "," +currentLegalMove[piece.x].Length);
+            if((currentLegalMove[piece.x])[piece.y] == 0) return false; //Illegal Move
+        }
     
         PieceColor pieceColor = (PieceColor)(grid[piece.x] % 2);
         PieceType pieceType = (PieceType)(grid[piece.x] - pieceColor);
@@ -44,7 +49,7 @@ public struct GameState
                         PieceManager.Instance.MovePiece((56, 59));
                         break;
                     case 62: // SMALL WHITE CASTLING
-                        grid[63] = -1; //56 = H1
+                        grid[63] = -1; //63 = H1
                         grid[61] = 6;
                         PieceManager.Instance.MovePiece((63, 61));
                         break;
@@ -130,7 +135,7 @@ public struct GameState
 
     public void Reset(string fenCode)
     {
-        if(fenCode == null)
+        if(fenCode == null) 
         {
             for (int i = 0; i < 64; i++)
             {
@@ -141,7 +146,7 @@ public struct GameState
         {
             grid = FenConvertor.GetGridFromFen(fenCode);
         }
-
+        
         gridInfo = new int[4]
         {
             0, 
@@ -150,8 +155,22 @@ public struct GameState
             3
         };
         
-        currentLegalMove = LegalMove.GetAllLegalMoves(this);
+        
+
+        GridPrint(this);
+        currentLegalMove = LegalMove.GetAllLegalMoves(Clone());
+        GridPrint(this);
     }
+
+    public GameState Clone()
+    {
+        return new GameState
+        {
+            grid = grid.Clone() as int[],
+            gridInfo = gridInfo.Clone() as int[],
+        };
+    }
+    
     
     static public (PieceColor,PieceType) GetPiece(int value)
     {
@@ -159,6 +178,27 @@ public struct GameState
         PieceType pieceType = (PieceType)(value - pieceColor);
         
         return(pieceColor, pieceType);
+    }
+
+    static public void GridPrint(int[] grid, int[] gridInfo = null)
+    {
+        string list = "";
+        for(int i =  0; i < grid.Length; i++)
+        {
+            if (i % 8 == 0) list += "\n";
+            if (grid[i] == -1) list += " -  | ";
+            else list += (PieceColor)(grid[i] % 2) + " " +  (PieceType)(grid[i] - grid[i] % 2) + " | ";
+        }
+        Debug.Log(list);
+        if (gridInfo != null)
+        {
+            Debug.Log((PieceColor)gridInfo[0]+ " is the current turn");
+        }
+    }
+
+    static public void GridPrint(GameState gameState)
+    {
+        GridPrint(gameState.grid,gameState.gridInfo);
     }
 }
 

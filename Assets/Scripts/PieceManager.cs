@@ -51,6 +51,8 @@ public class PieceManager : MonoBehaviour
     public void RenderNewBoard(int[] grid)
     {
         DestroyBoard();
+
+        
         
         for (int i = 0; i < grid.Length; i++)
         {

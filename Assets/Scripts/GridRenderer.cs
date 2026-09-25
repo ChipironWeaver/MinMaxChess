@@ -95,6 +95,10 @@ public class GridRenderer : MonoBehaviour
             print("No legal moves found");
             return;
         }
+        else if (legalMoves.Length == 0)
+        {
+            print("No legal moves for this piece");
+        }
         for (int i = 0; i < legalMoves.Length; i++)
         {
             if (legalMoves[i] > 0)
